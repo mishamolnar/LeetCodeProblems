@@ -3,6 +3,10 @@ package LeetCode.linkedList;
 //complexity O(n)
 // link - https://leetcode.com/problems/reverse-linked-list/submissions/
 public class ReverseLinkedList {
+    public static void main(String[] args) {
+        ReverseLinkedList reverseLinkedList = new ReverseLinkedList();
+        reverseLinkedList.reverseListRecursively(new ListNode(1, new ListNode(2, new ListNode(3, new ListNode(4, new ListNode(5))))));
+    }
 
     public ListNode reverseList(ListNode head) {
         ListNode prev = null;
@@ -26,7 +30,7 @@ public class ReverseLinkedList {
         return reverseList(next, head);
     }
 
-    private class ListNode {
+    private static class ListNode {
       int val;
       ListNode next;
       ListNode() {}
