@@ -27,8 +27,38 @@ public class LongestSubstringWithoutRepeatingCharacters {
         return max;
     }
 
+
+
     public static void main(String[] args) {
         LongestSubstringWithoutRepeatingCharacters lswrc = new LongestSubstringWithoutRepeatingCharacters();
-        lswrc.lengthOfLongestSubstring("pwwkew");
+        lswrc.lengthOfLongestSubstringTwo("pwwkew");
     }
+
+
+
+    //Longest Substring Without Repeating Characters second try 13.05
+    public int lengthOfLongestSubstringTwo(String s) {
+        int left = 0, currMax = 0, max = 0;
+        int[] occurrences  = new int[256];
+        for (int i = 0; i < s.length(); i++) {
+            char curr = s.charAt(i);
+            occurrences[curr]++;
+            currMax++;
+            if (occurrences[curr] < 2) {
+                max = Math.max(currMax, max);
+            } else {
+                while (occurrences[curr] > 1) {
+                    occurrences[s.charAt(left)]--;
+                    left++;
+                    currMax--;
+                }
+            }
+        }
+        return max;
+    }
+
+
+
+
+
 }

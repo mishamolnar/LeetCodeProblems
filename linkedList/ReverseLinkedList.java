@@ -5,7 +5,7 @@ package LeetCode.linkedList;
 public class ReverseLinkedList {
     public static void main(String[] args) {
         ReverseLinkedList reverseLinkedList = new ReverseLinkedList();
-        reverseLinkedList.reverseListRecursively(new ListNode(1, new ListNode(2, new ListNode(3, new ListNode(4, new ListNode(5))))));
+        reverseLinkedList.reverseListTwo(new ListNode(1, new ListNode(2, new ListNode(3, new ListNode(4, new ListNode(5))))));
     }
 
     public ListNode reverseList(ListNode head) {
@@ -36,5 +36,16 @@ public class ReverseLinkedList {
       ListNode() {}
       ListNode(int val) { this.val = val; }
       ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+    }
+
+    private ListNode reverseListTwo(ListNode root) {
+        return reverseListHelper(root, null);
+    }
+
+    private ListNode reverseListHelper(ListNode head, ListNode newHead) {
+        if (head == null) return newHead;
+        ListNode nextHead = head.next; //пройти на наступну ітерацію заданої ноди
+        head.next = newHead; //поточній ітерації присвоїти значення заданої ноди плюс інші попередньо перевенуті
+        return reverseListHelper(nextHead, head);
     }
 }

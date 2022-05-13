@@ -33,7 +33,8 @@ public class IntersectionOfTwoLinkedLists {
         return null;
     }
 
-    
+
+
     public ListNode getIntersectionNodeTwo(ListNode headA, ListNode headB) {
         if (headA == null || headB == null) return null;
         ListNode aPointer = headA;
