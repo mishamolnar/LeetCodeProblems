@@ -2,7 +2,7 @@ package LeetCode.arrays;
 
 import java.util.HashSet;
 
-//
+//https://leetcode.com/problems/contains-duplicate-ii/
 public class ContainsDuplicateII {
 
     public static void main(String[] args) {
