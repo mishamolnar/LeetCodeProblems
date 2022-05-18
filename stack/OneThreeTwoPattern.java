@@ -8,6 +8,41 @@ import java.util.Stack;
 //https://leetcode.com/problems/132-pattern/submissions/
 public class OneThreeTwoPattern {
 
+
+
+
+    public static void main(String[] args) {
+        OneThreeTwoPattern oneThreeTwoPattern = new OneThreeTwoPattern();
+        System.out.println(oneThreeTwoPattern.find132patternSecond(new int[]{3,1,4,2}));
+    }
+
+
+
+
+
+
+    public boolean find132patternSecond(int[] nums) {
+        int ak = Integer.MIN_VALUE;
+        Stack<Integer> stack = new Stack<>();
+        for (int i = nums.length - 1; i >= 0; i--) {
+            if (nums[i] < ak) return true;
+            else {
+                while (!stack.isEmpty() && stack.peek() < nums[i]) {
+                    ak = stack.pop();
+                }
+                stack.push(nums[i]);
+            }
+        }
+        return false;
+    }
+
+
+
+
+
+
+
+
     //i < j < k
     //nums[i] < nums[k] < nums[j]
     // ak - nums[k]
@@ -37,8 +72,4 @@ public class OneThreeTwoPattern {
 //    }
 //
 //    return false;
-
-    public static void main(String[] args) {
-
-    }
 }
