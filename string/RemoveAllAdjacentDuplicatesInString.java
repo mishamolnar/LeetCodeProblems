@@ -5,7 +5,19 @@ public class RemoveAllAdjacentDuplicatesInString {
 
     public static void main(String[] args) {
         RemoveAllAdjacentDuplicatesInString remove = new RemoveAllAdjacentDuplicatesInString();
-        System.out.println(remove.removeDuplicates("abbacaazxxzy"));
+        System.out.println(remove.removeDuplicatesStack("abbacaazxxzy"));
+    }
+
+    //Time O(N) for one pass
+    //Space O(N) for output
+    public String removeDuplicatesStack(String s) {
+        char[] arr = s.toCharArray();
+        int res = 0;
+        for (int i = 0; i < arr.length; i++, res++) {
+            arr[res] = arr[i];
+            if (res > 0 && arr[res] == arr[res - 1]) res -= 2;
+        }
+        return new String(arr, 0, res);
     }
 
     public String removeDuplicates(String s) {
