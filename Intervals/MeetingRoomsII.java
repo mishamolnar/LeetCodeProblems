@@ -8,6 +8,29 @@ import java.util.PriorityQueue;
 
 //link - https://www.lintcode.com/problem/919/description
 public class MeetingRoomsII {
+
+
+    public int minMeetingRoomsTwo(List<Interval> intervals) {
+        int[] starts = new int[intervals.size()];
+        int[] ends = new int[intervals.size()];
+        for (int i = 0; i < intervals.size(); i++) {
+            starts[i] = intervals.get(i).start;
+            ends[i] = intervals.get(i).end;
+        }
+        Arrays.sort(starts);
+        Arrays.sort(ends);
+        int curr = 0, max = 0, endPointer = 0;
+        for (int i = 0; i < starts.length; i++) {
+            curr++;
+            while (starts[i] >= ends[endPointer]) {
+                endPointer++;
+                curr--;
+            }
+            max = Math.max(curr, max);
+        }
+        return max;
+    }
+
     public static void main(String[] args) {
         MeetingRoomsII meetingRoomsII = new MeetingRoomsII();
         List<MeetingRoomsII.Interval> list = new ArrayList<>();

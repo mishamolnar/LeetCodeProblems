@@ -6,6 +6,44 @@ import java.util.*;
 public class MinimumHeightTrees {
 
 
+
+
+
+
+
+
+    public List<Integer> findMinHeightTreesTwo(int n, int[][] edges) {
+        if (n == 1) return Collections.singletonList(1);
+        List<Set<Integer>> G = new ArrayList<>(n);
+        for (int i = 0; i < n; i++) G.add(new HashSet<>());
+        for (int[] edge : edges) {
+            G.get(edge[0]).add(edge[1]);
+            G.get(edge[1]).add(edge[0]);
+        }
+        List<Integer> leaves = new ArrayList<>();
+        for (int i = 0; i < G.size(); i++) {
+            if (G.get(i).size() == 1) leaves.add(i);
+        }
+
+        while (n > 2) {
+            n -= leaves.size();
+            List<Integer> newLeaves = new ArrayList<>();
+            for (Integer leaf : leaves) {
+                int next = G.get(leaf).iterator().next();
+                G.get(next).remove(leaf);
+                if (G.get(next).size() == 1) newLeaves.add(next);
+            }
+            leaves = newLeaves;
+        }
+        return leaves;
+    }
+
+
+
+
+
+
+    
     //O(n) memory and space
     public List<Integer> findMinHeightTrees(int n, int[][] edges) {
         if (n == 1) return Collections.singletonList(0);
@@ -38,6 +76,6 @@ public class MinimumHeightTrees {
 
     public static void main(String[] args) {
         MinimumHeightTrees minimumHeightTrees = new MinimumHeightTrees();
-        System.out.println(minimumHeightTrees.findMinHeightTrees(4, new int[][]{{1,0},{1,2},{1,3}}));
+        System.out.println(minimumHeightTrees.findMinHeightTreesTwo(4, new int[][]{{1,0},{1,2},{1,3}}));
     }
 }

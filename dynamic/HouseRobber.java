@@ -7,6 +7,18 @@ import java.util.HashSet;
 public class HouseRobber {
 
 
+    public int rob(int[] nums) {
+        int prevOne = nums[0];
+        int prevTwo = 0;
+        for (int i = 1; i < nums.length; i++) {
+            int buff = prevOne;
+            prevOne = Math.max(prevOne, prevTwo + nums[i]);
+            prevTwo = buff;
+        }
+        return Math.max(prevTwo, prevOne);
+    }
+
+
     // step 1 naive recursion / top-down
     //time - 2^n where n is size of arr, O(1) space
     public int robSimpleRecursion(int[] nums) {

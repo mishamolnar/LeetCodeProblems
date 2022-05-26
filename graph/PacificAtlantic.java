@@ -9,6 +9,36 @@ import java.util.List;
 public class PacificAtlantic {
     private static final int[][] DIRECTIONS = new int[][]{{0, 1}, {1, 0}, {-1, 0}, {0, -1}};
 
+    public List<List<Integer>> pacificAtlanticTwo(int[][] heights) {
+        List<List<Integer>> res = new ArrayList<>();
+        boolean[][] pacific = new boolean[heights.length][heights[0].length];
+        boolean[][] atlantic = new boolean[heights.length][heights[0].length];
+        for (int i = 0; i < heights.length; i++) {
+            for (int j = 0; j < heights[0].length; j++) {
+                if (i == 0 || j == 0) dfs(heights, res, pacific, atlantic, i, j);
+            }
+        }
+        for (int i = 0; i < heights.length; i++) {
+            for (int j = 0; j < heights[0].length; j++) {
+                if (i == heights.length - 1 || j == heights[0].length - 1) dfs(heights, res, atlantic, pacific, i, j);
+            }
+        }
+        return res;
+    }
+
+    private void dfs(int[][] heights, List<List<Integer>> result, boolean[][] current, boolean[][] oposite,  int x, int y) {
+        if (x < 0 || y < 0 || x >= heights.length || y >= heights[0].length || current[x][y]) return;
+        current[x][y] = true;
+        if (oposite[x][y]) result.add(List.of(x, y));
+        for (int[] dir : DIRECTIONS) {
+            int x1 = x + dir[0];
+            int y1 = y + dir[1];
+            if (x1 < 0 || y1 < 0 || x1 >= heights.length || y1 >= heights[0].length) continue;
+            if (heights[x1][y1] < heights[x][y]) continue;
+            dfs(heights, result, current, oposite, x1, y1);
+        }
+    }
+
     public List<List<Integer>> pacificAtlantic(int[][] heights) {
         boolean[][] pacific = new boolean[heights.length][heights[0].length]; //isMarked analog for pacific coast
         boolean[][] atlantic = new boolean[heights.length][heights[0].length]; // isMarked analog for atlantic coast
@@ -38,7 +68,7 @@ public class PacificAtlantic {
 
     public static void main(String[] args) {
         PacificAtlantic pacificAtlantic = new PacificAtlantic();
-        List<List<Integer>> result = pacificAtlantic.pacificAtlantic(new int[][]{{2,1},{1,2}});
+        List<List<Integer>> result = pacificAtlantic.pacificAtlanticTwo(new int[][]{{1,2,2,3,5},{3,2,3,4,4},{2,4,5,3,1},{6,7,1,4,5},{5,1,1,2,4}});
         System.out.println(result.toString());
     }
 }

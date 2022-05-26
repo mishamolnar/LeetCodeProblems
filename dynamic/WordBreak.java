@@ -7,6 +7,24 @@ import java.util.Set;
 // link - https://leetcode.com/problems/word-break/submissions/
 public class WordBreak {
 
+
+
+
+    public boolean wordBreakTwo(String s, List<String> wordDict) {
+        boolean[] dp = new boolean[s.length() + 1];
+        dp[0] = true;
+        for (int i = 0; i < dp.length; i++) {
+            if (!dp[i]) continue;
+            for (String s1 : wordDict) {
+                if (s1.length() + i > s.length()) continue;
+                if (s.substring(i, i + s1.length()).equals(s1)) dp[i + s1.length()] = true;
+            }
+        }
+        return dp[s.length()];
+    }
+
+
+
     // n3 approach (time)/ space = n2 + wordDict
     public boolean wordBreak(String s, List<String> wordDict) {
         return wordBreak(s, 0, new HashSet<>(wordDict), new Boolean[s.length()]);
@@ -67,7 +85,8 @@ public class WordBreak {
 
     public static void main(String[] args) {
         WordBreak wordBreak = new WordBreak();
-        System.out.println(wordBreak.wordBreakDictionary("catsandog", List.of("cats", "dog", "sand", "and", "cat")));
+        //System.out.println(wordBreak.wordBreakTwo("catsandog", List.of("cats", "dog", "sand", "and", "cat")));
+        System.out.println(wordBreak.wordBreakTwo("leetcode", List.of("leet", "code", "sand", "and", "cat")));
     }
 
 

@@ -2,7 +2,18 @@ package LeetCode.arrays;
 
 import java.util.Arrays;
 
+//link - https://leetcode.com/problems/maximum-subarray/submissions/
 public class MaximumSubarray {
+
+    public int maxSubArrayTwo(int[] nums) {
+        int left = 0, max = nums[0], sum = nums[0];
+        for (int i = 1; i < nums.length; i++) {
+            if (sum < 0) sum = nums[i];
+            else sum += nums[i];
+            max = Math.max(sum, max);
+        }
+        return max;
+    }
 
     // O(n) solution
     public int maxSubArray(int[] nums) {
