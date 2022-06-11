@@ -2,10 +2,7 @@ package LeetCode.graph;
 
 import com.sun.jdi.ArrayReference;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.PriorityQueue;
+import java.util.*;
 
 // not solved https://leetcode.com/problems/cheapest-flights-within-k-stops/submissions/
 // Time Limit Exceeded error
@@ -13,35 +10,46 @@ public class CheapestFlightsWithKStops {
 
     public static void main(String[] args) {
         CheapestFlightsWithKStops cpf = new CheapestFlightsWithKStops();
-        System.out.println(cpf.findCheapestPrice(3, new int[][]{{0,1,100},{1,2,100},{0,2,500}}, 0, 2, 1));
+        System.out.println(cpf.findCheapestPrice(4, new int[][]{{0,1,100},{1,2,200},{2,0,100},{1,3,600},{2,3,200}}, 0, 3, 1));
     }
 
-    public int findCheapestPrice(int n, int[][] flights, int src, int dst, int k) {
-        Map<Integer, Integer>[] adj = new Map[n];
-        for(int i = 0; i < n; i++) adj[i] = new HashMap<>();
-        for (int[] flight : flights) {
-            adj[flight[0]].put(flight[1], flight[2]);
-        }
-        int[] distances = new int[n];
-        Arrays.fill(distances, Integer.MAX_VALUE);
-        int[] numberOfStops = new int[n];
-        Arrays.fill(numberOfStops, Integer.MAX_VALUE);
 
-        PriorityQueue<int[]> pq = new PriorityQueue<>((a, b) -> a[0] - b[0]);
-        pq.add(new int[]{src, 0, 0}); //dest, price, count
+        //O(V^2 log(v)) time complexity, because each node can be added multiple times (V times in worst case)
+        //O(V^2) space because of PQ
+        public int findCheapestPrice(int n, int[][] flights, int src, int dst, int k) {
+            int[] price = new int[n];
+            int[] stops = new int[n];
+            Arrays.fill(price, Integer.MAX_VALUE);
+            Arrays.fill(stops, Integer.MAX_VALUE);
+            Map<Integer, List<int[]>>  map = new HashMap<>();
+            for (int[] flight : flights) {
+                map.putIfAbsent(flight[0], new ArrayList<>());
+                map.get(flight[0]).add(new int[] {flight[1], flight[2]});
+            }
+            PriorityQueue<int[]> pq = new PriorityQueue<>((a, b) -> a[1] - b[1]);
+            pq.add(new int[]{src, 0, 0}); //node, price, steps
+            price[src] = 0;
+            stops[src] = 0;
+            while (!pq.isEmpty()) {
+                int[] info = pq.poll();
+                int node = info[0], currStops = info[2], cost = info[1];
 
-        while (!pq.isEmpty()) {
-            int[] curr = pq.remove();
-            if (curr[2] > k) continue;
-            for (Integer dist : adj[curr[0]].keySet()) {
-                pq.add(new int[]{dist, curr[1] + adj[curr[0]].get(dist), curr[2] + 1});
-                if (curr[1] + adj[curr[0]].get(dist) < distances[dist]) {
-                    distances[dist] = curr[1] + adj[curr[0]].get(dist);
-                } else if (numberOfStops[dist] > curr[2] + 1) {
-                    numberOfStops[dist] = curr[2] + 1;
+                if (dst == node) return cost;
+
+                if (currStops == k + 1) continue;
+
+                if (!map.containsKey(node)) continue;
+                for (int[] ints : map.get(node)) {
+                    int nextNode = ints[0], nextPrice = ints[1];
+                    if (price[nextNode] > cost + nextPrice) {
+                        price[nextNode] = cost + nextPrice;
+                        stops[nextNode] = currStops + 1;
+                        pq.offer(new int[]{nextNode, cost + nextPrice, currStops + 1});
+                    } else if (currStops < stops[nextNode]) {
+                        pq.offer(new int[]{nextNode, cost + nextPrice, currStops + 1});
+                    }
                 }
             }
+            return price[dst] == Integer.MAX_VALUE ? -1 : price[dst];
         }
-        return distances[dst] < Integer.MAX_VALUE ? distances[dst] : -1;
-    }
 }
