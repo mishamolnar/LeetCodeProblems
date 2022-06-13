@@ -5,7 +5,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-//https://leetcode.com/problems/reorder-routes-to-make-all-paths-lead-to-the-city-zero/
+//https://leetcode.com/problems/find-positive-integer-solution-for-a-given-equation/
 public class HiddenFormula {
     public static void main(String[] args) {
         HiddenFormula hiddenFormula = new HiddenFormula();
