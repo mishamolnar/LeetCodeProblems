@@ -25,6 +25,33 @@ public class EmployeeFreeTime {
         return result;
     }
 
+    public List<Interval> employeeFreeTimeLogMy(List<List<Interval>> schedule) {
+        List<Interval> result = new ArrayList<>();
+        PriorityQueue<int[]> pq = new PriorityQueue<>(
+                (a, b) -> schedule.get(a[0]).get(a[1]).start - schedule.get(b[0]).get(b[1]).start);
+        //int[] 0 index - pointer in schedule, 1 index - pointer in employee
+        for (int i = 0; i < schedule.size(); i++) pq.add(new int[]{i, 0});
+
+        int max = schedule.get(pq.peek()[0]).get(pq.peek()[1]).end;
+        while (!pq.isEmpty()) {
+            int[] curr = pq.poll();
+            if (schedule.get(curr[0]).get(curr[1]).start > max) {
+                result.add(new Interval(max, schedule.get(curr[0]).get(curr[1]).start));
+            }
+
+            max = Math.max(max, schedule.get(curr[0]).get(curr[1]).end);
+            if (schedule.get(curr[0]).size() > curr[1] + 1) pq.add(new int[]{curr[0], curr[1] + 1});
+        }
+
+        return result;
+    }
+
+
+
+
+
+
+
     //Onlogk solution
     public List<Interval> employeeFreeTimeNlogK(List<List<Interval>> schedule) {
         //Create a priority queue with a comparator on the start of the first interval  in each list of intervals

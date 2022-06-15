@@ -5,47 +5,70 @@ import java.util.*;
 //https://leetcode.com/problems/analyze-user-website-visit-pattern/submissions/
 //n3 space and n! time complexity
 public class AnalyzeUserWebsiteVisitPattern {
+
+    //["joe","joe","joe","james","james","james","james","mary","mary","mary"]
+    //[1,2,3,4,5,6,7,8,9,10]
+    //["home","about","career","home","cart","maps","home","home","about","career"]
     public List<String> mostVisitedPattern(String[] username, int[] timestamp, String[] website) {
-        TreeMap<Integer, String[]> logs = new TreeMap<>();
-        for (int i = 0; i < username.length; i++) {
-            logs.put(timestamp[i], new String[]{username[i], website[i]});
+        Map<String, List<Pair>> map = new HashMap<>();
+        int n = username.length;
+        // collect the website info for every user, key: username, value: (timestamp, website)
+        for (int i = 0; i < n; i++) {
+            map.putIfAbsent(username[i], new ArrayList<>());
+            map.get(username[i]).add(new Pair(timestamp[i], website[i]));
         }
-        int max = 0;
-        HashMap<String, LinkedList<String>> list = new HashMap<>();
-        HashMap<List<String>, Integer> counts = new HashMap<>();
-        List<List<String>> result = new ArrayList<>();
-        for (String[] value : logs.values()) {
-            list.putIfAbsent(value[0], new LinkedList<>());
-            list.get(value[0]).add(value[1]);
-        }
-        for (LinkedList<String> value : list.values()) {
-            List<List<String>> patterns = new ArrayList<>();
-            getAllPatterns(patterns, value, new ArrayList<>(), 0);
-            for (List<String> pattern : patterns) {
-                int curr  = counts.getOrDefault(pattern, 0) + 1;
-                counts.put(pattern, curr);
-                if (curr == max) result.add(pattern);
-                else if (curr > max) {
-                    max = curr;
-                    result = new ArrayList<>();
-                    result.add(pattern);
+        // count map to record every 3 combination occuring time for the different user.
+        Map<String, Integer> count = new HashMap<>();
+        String res = "";
+        for (String key : map.keySet()) {
+            Set<String> set = new HashSet<>();
+            // this set is to avoid visit the same 3-seq in one user
+            List<Pair> list = map.get(key);
+            Collections.sort(list, (a, b)->(a.time - b.time)); // sort by time
+            // brutal force O(N ^ 3)
+            for (int i = 0; i < list.size(); i++) {
+                for (int j = i + 1; j < list.size(); j++) {
+                    for (int k = j + 1; k < list.size(); k++) {
+                        String str = list.get(i).web + " " + list.get(j).web + " " + list.get(k).web;
+                        if (!set.contains(str)) {
+                            count.put(str, count.getOrDefault(str, 0) + 1);
+                            set.add(str);
+                        }
+                        if (res.equals("") || count.get(res) < count.get(str) || (count.get(res) == count.get(str) && res.compareTo(str) > 0)) {
+                            // make sure the right lexi order
+                            res = str;
+                        }
+                    }
                 }
             }
         }
-        if (result.size() == 1) return result.get(0);
-        result.sort((a, b) -> a.get(0).compareTo(b.get(0)) != 0 ? a.get(0).compareTo(b.get(0)) :
-                a.get(1).compareTo(b.get(1)) != 0 ? a.get(1).compareTo(b.get(1)) : a.get(2).compareTo(b.get(2)));
-        return result.get(0);
+        // grab the right answer
+        String[] r = res.split(" ");
+        List<String> result = new ArrayList<>();
+        for (String str : r) {
+            result.add(str);
+        }
+        return result;
     }
 
-    private void getAllPatterns(List<List<String>> result, List<String> visited, List<String> current, int index) {
-        if (current.size() == 3) result.add(current);
-        else {
-            for (int i = index; i < visited.size(); i++) {
-                current.add(visited.get(i));
-                getAllPatterns(result, visited, new ArrayList<>(current), i + 1);
-                current.remove(current.size() - 1);
-            }
+    class Pair {
+        int time;
+        String web;
+        public Pair(int time, String web) {
+            this.time = time;
+            this.web = web;
+        }
+    }
+
+    private class Record{
+        private int timestamp;
+        private String userName;
+        private String webSite;
+
+        public Record(int timestamp, String userName, String webSite) {
+            this.timestamp = timestamp;
+            this.userName = userName;
+            this.webSite = webSite;
         }
     }
 }

@@ -26,6 +26,30 @@ public class BinaryTreeVerticalOrderTraversal {
         return res;
     }
 
+    public List<List<Integer>> verticalOrderTwo(TreeNode root) {
+        if (root == null) return Collections.emptyList();
+        HashMap<Integer, List<Integer>> map = new HashMap<>();
+        int left = 0, right = 0;
+        Queue<Map.Entry<TreeNode, Integer>> queue = new ArrayDeque<>();
+        queue.add(Map.entry(root, 0));
+        while (!queue.isEmpty()) {
+            Map.Entry<TreeNode, Integer> current = queue.poll();
+            map.putIfAbsent(current.getValue(), new ArrayList<>());
+            map.get(current.getValue()).add(current.getKey().val);
+            left = Math.min(left, current.getValue());
+            right = Math.max(right, current.getValue());
+            if (current.getKey().left != null)
+                queue.add(Map.entry(current.getKey().left, current.getValue() - 1));
+            if (current.getKey().right != null)
+                queue.add(Map.entry(current.getKey().right, current.getValue() + 1));
+        }
+        List<List<Integer>> result = new ArrayList<>();
+        for (int i = left; i <= right; i++) {
+            result.add(map.get(i));
+        }
+        return result;
+    }
+
 //    public List<List<Integer>> verticalOrder(TreeNode root) {
 //        List<List<Integer>> output = new ArrayList();
 //        if (root == null) {
@@ -69,7 +93,7 @@ public class BinaryTreeVerticalOrderTraversal {
     public static void main(String[] args) {
         BinaryTreeVerticalOrderTraversal verticalOrderTraversal = new BinaryTreeVerticalOrderTraversal();
         TreeNode three = new TreeNode(3, new TreeNode(9), new TreeNode(20, new TreeNode(15), new TreeNode(7)));
-        System.out.println(verticalOrderTraversal.verticalOrder(three));
+        System.out.println(verticalOrderTraversal.verticalOrderTwo(three));
     }
 
 
