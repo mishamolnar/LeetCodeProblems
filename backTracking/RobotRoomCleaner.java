@@ -30,7 +30,7 @@ public class RobotRoomCleaner {
                 goBack();
             }
 
-            robot.turnRight();
+            robot.turnRight(); //clockwise
         }
     }
 
