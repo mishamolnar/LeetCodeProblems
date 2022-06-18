@@ -3,7 +3,46 @@ package LeetCode.linkedList;
 //https://leetcode.com/problems/insert-into-a-sorted-circular-linked-list/
 public class InsertIntoSortedCircularLinkedList {
 
+
+    public static void main(String[] args) {
+        InsertIntoSortedCircularLinkedList insertIntoSortedCircularLinkedList = new InsertIntoSortedCircularLinkedList();
+        insertIntoSortedCircularLinkedList.insertPrem(new Node(3, new Node(4, new Node(1))), 2);
+    }
+
+    //https://leetcode.com/problems/insert-into-a-sorted-circular-linked-list/submissions/
     public Node insert(Node head, int insertVal) {
+        if (head == null) {
+            Node toReturn = new Node(insertVal);
+            toReturn.next = toReturn;
+            return toReturn;
+        }
+        Node prev = head;
+        Node curr = head.next;
+        boolean inserted = false;
+        do {
+
+            if (prev.val <= insertVal && curr.val >= insertVal) {
+                prev.next = new Node(insertVal, curr);
+                inserted = true;
+                break;
+            }
+
+            if ((prev.val <= insertVal && curr.val < prev.val) ||
+                    (curr.val < prev.val && insertVal < curr.val)) {
+                prev.next = new Node(insertVal, curr);
+                inserted = true;
+                break;
+            }
+
+            prev = curr;
+            curr = curr.next;
+        } while (prev != head);
+
+        if (!inserted) prev.next = new Node(insertVal, curr);
+        return head;
+    }
+
+    public Node insertPrem(Node head, int insertVal) {
         if (head == null) {
             Node toReturn = new Node(insertVal);
             toReturn.next = toReturn;
@@ -28,13 +67,13 @@ public class InsertIntoSortedCircularLinkedList {
 
             prev = curr;
             curr = curr.next;
-        } while (prev == head);
+        } while (prev != head);
 
         prev.next = new Node(insertVal, curr); //якщо пройшли круг і ніде не вставили - тоді всі велечини одинакові і можна вставляти будь де
         return head;
     }
 
-    private class Node {
+    private static class Node {
         public int val;
         public Node next;
 
