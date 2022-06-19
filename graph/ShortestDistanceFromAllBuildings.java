@@ -53,6 +53,52 @@ public class ShortestDistanceFromAllBuildings {
         return Math.abs(x - i) + Math.abs(y - j);
     }
 
+
+    public int shortestDistanceTwo(int[][] grid) {
+        int[][][] counts = new int[grid.length][grid[0].length][2];
+        int[][] dirs = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
+
+        int buildingsCount = 0, minDistance = Integer.MAX_VALUE;
+
+        for (int i = 0; i < grid.length; i++) {
+            for (int j = 0; j < grid[0].length; j++) {
+                if (grid[i][j] == 1) {
+                    minDistance = Integer.MAX_VALUE;
+                    Queue<int[]> queue = new ArrayDeque<>();
+                    boolean[][] seen = new boolean[grid.length][grid[0].length];
+                    queue.add(new int[] {i, j});
+                    int steps = 0;
+                    seen[i][j] = true;
+                    while (!queue.isEmpty()) {
+                        steps++;
+
+                        for (int l = queue.size(); l > 0; l--) {
+                            int[] curr = queue.poll();
+
+                            for (int[] dir : dirs) {
+                                int nextI = curr[0] + dir[0];
+                                int nextJ = curr[1] + dir[1];
+
+                                if (nextI >= 0 && nextJ >= 0 && nextI < grid.length &&
+                                        nextJ < grid[0].length && !seen[nextI][nextJ] &&
+                                        counts[nextI][nextJ][0] == buildingsCount
+                                        && grid[nextI][nextJ] != 2 && grid[nextI][nextJ] != 1) {
+                                    counts[nextI][nextJ][0]++;
+                                    counts[nextI][nextJ][1] += steps;
+                                    seen[nextI][nextJ] = true;
+                                    queue.add(new int[] {nextI, nextJ});
+                                    minDistance = Math.min(minDistance, counts[nextI][nextJ][1]);
+                                }
+                            }
+                        }
+                    }
+                    buildingsCount++;
+                }
+            }
+        }
+        return minDistance == Integer.MAX_VALUE ? -1 : minDistance;
+    }
+
     public int shortestDistanceNotManhatten(int[][] grid) {
         // Next four directions.
         int dirs[][] = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
@@ -115,6 +161,6 @@ public class ShortestDistanceFromAllBuildings {
 
     public static void main(String[] args) {
         ShortestDistanceFromAllBuildings shortestDistanceFromAllBuildings = new ShortestDistanceFromAllBuildings();
-        System.out.println(shortestDistanceFromAllBuildings.shortestDistanceNotManhatten(new int[][]{{1,1,1,1,1,0},{0,0,0,0,0,1},{0,1,1,0,0,1},{1,0,0,1,0,1},{1,0,1,0,0,1},{1,0,0,0,0,1},{0,1,1,1,1,0}}));
+        System.out.println(shortestDistanceFromAllBuildings.shortestDistanceTwo(new int[][]{{1,0,2,0,1},{0,0,0,0,0},{0,0,1,0,0}}));
     }
 }
