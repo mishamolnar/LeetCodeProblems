@@ -8,6 +8,7 @@ public class EncodeStringWithShortestLength {
     //dp[i][j] = string from index i to index j in encoded form.
     //O(n)
     //"abbbabbbcabbbabbbc" -> "2[2[abbb]c]"
+    //dp[i][j] = min(dp[i][j], dp[i][k] + dp[k+1][j])
     public String encode(String s) {
         int len = s.length();
         String[][] dp = new String[len][len];
@@ -41,19 +42,6 @@ public class EncodeStringWithShortestLength {
             }
         }
         return dp[0][len - 1];
-    }
-
-    public static String encode1(String s, Map<String, String> map) {
-        if (map.containsKey(s)) return map.get(s);
-        if (s.length() <= 4) return s; //adding this further reduces the runtime from 168 ms to 134 ms
-        int n = s.length();
-        int i = (s + s).indexOf(s, 1);
-        String one = i < n ? String.format("%d[%s]", n / i, encode1(s.substring(0, i), map)) : s;
-        List<String> multi = new ArrayList<>(Arrays.asList(one));
-        for (int j = 1; j < n; j++) multi.add(encode1(s.substring(0, j), map) + encode1(s.substring(j), map));
-        String res = multi.stream().min(Comparator.comparingInt(String::length)).get();
-        map.put(s, res);
-        return res;
     }
 
     public static void main(String[] args) {

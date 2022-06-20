@@ -1,6 +1,8 @@
 package LeetCode.matrixes;
 
 import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Queue;
 
 //https://leetcode.com/problems/best-meeting-point/submissions/
@@ -9,7 +11,7 @@ public class BestMeetingPoint {
 
 
     //bfs - O(m2n2) complexity
-    public int minTotalDistance(int[][] grid) {
+    public int minTotalDistanceBFS(int[][] grid) {
         int[][][] distances = new int[grid.length][grid[0].length][2]; //0 - count, 1 sum of distances
         for (int i = 0; i < grid.length; i++) {
             for (int j = 0; j < grid[i].length; j++) {
@@ -47,6 +49,49 @@ public class BestMeetingPoint {
 
     private int manhattan(int i, int j, int x, int y) {
         return Math.abs(i - x) + Math.abs(j - y);
+    }
+
+
+    //median solution
+    // O(mn) space and time
+    public int minTotalDistance(int[][] grid) {
+        List<Integer> rows = collectRows(grid);
+        List<Integer> cols = collectCols(grid);
+        int row = rows.get(rows.size() / 2);
+        int col = cols.get(cols.size() / 2);
+        return minDistance1D(rows, row) + minDistance1D(cols, col);
+    }
+
+    private int minDistance1D(List<Integer> points, int origin) {
+        int distance = 0;
+        for (int point : points) {
+            distance += Math.abs(point - origin);
+        }
+        return distance;
+    }
+
+    private List<Integer> collectRows(int[][] grid) {
+        List<Integer> rows = new ArrayList<>();
+        for (int row = 0; row < grid.length; row++) {
+            for (int col = 0; col < grid[0].length; col++) {
+                if (grid[row][col] == 1) {
+                    rows.add(row);
+                }
+            }
+        }
+        return rows;
+    }
+
+    private List<Integer> collectCols(int[][] grid) {
+        List<Integer> cols = new ArrayList<>();
+        for (int col = 0; col < grid[0].length; col++) {
+            for (int row = 0; row < grid.length; row++) {
+                if (grid[row][col] == 1) {
+                    cols.add(col);
+                }
+            }
+        }
+        return cols;
     }
 
     public static void main(String[] args) {
