@@ -22,6 +22,6 @@ public class SentenceScreenFitting {
 
     public static void main(String[] args) {
         SentenceScreenFitting sentenceScreenFitting = new SentenceScreenFitting();
-        System.out.println(sentenceScreenFitting.wordsTyping(new String[]{"hello", "word"}, 2, 8));
+        System.out.println(sentenceScreenFitting.wordsTyping(new String[]{"abc", "de", "f"}, 4, 6));
     }
 }

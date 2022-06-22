@@ -18,6 +18,26 @@ public class BinaryTreeUpsideDown {
         return newRoot;
     }
 
+    public TreeNode upsideDownBinaryTreeIterative(TreeNode root) {
+        TreeNode curr = root;
+        TreeNode prev = null;
+        TreeNode next = null;
+        TreeNode temp = null;
+
+        while (curr != null) {
+            next = curr.left;
+
+            curr.left = temp;
+            temp = curr.right;
+            curr.right = prev;
+
+            prev = curr;
+            curr = next;
+        }
+
+        return prev;
+    }
+
     private static class TreeNode {
         int val;
         BinaryTreeUpsideDown.TreeNode left;
@@ -28,6 +48,16 @@ public class BinaryTreeUpsideDown {
             this.val = val;
             this.left = left;
             this.right = right;
+        }
+
+
+        @Override
+        public String toString() {
+            return "TreeNode{" +
+                    "val=" + val +
+                    ", left=" + left.val +
+                    ", right=" + right.val +
+                    '}';
         }
     }
 }
