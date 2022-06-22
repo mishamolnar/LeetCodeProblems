@@ -4,14 +4,12 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.TreeSet;
 
-//
 public class LongestRepeatingSubstring {
     public static void main(String[] args) {
         String s1 = "yes";
         s1.concat("234");
         System.out.println(s1);
         int[] d = {1, 2, 3};
-        new String("adf");
     }
 
 
