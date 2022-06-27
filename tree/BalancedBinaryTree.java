@@ -1,18 +1,24 @@
 package LeetCode.tree;
 
 
+import java.util.ArrayDeque;
+import java.util.Queue;
+
 //https://leetcode.com/problems/balanced-binary-tree/submissions/
 public class BalancedBinaryTree {
 
-
+    //O(n) time and space in worst case
     public boolean isBalanced(TreeNode root) {
         if (root == null) return true;
-        return isBalanced(root.left) && isBalanced(root.right) && Math.abs(getHeight(root.right, 1) - getHeight(root.left, 1)) < 2;
+        return getHeightMax(root, 0) != -1;
     }
 
-    private int getHeight(TreeNode node, int curr) {
+    private int getHeightMax(TreeNode node, int curr) {
         if (node == null) return curr;
-        return Math.max(getHeight(node.left, curr + 1), getHeight(node.right, curr + 1));
+        int left = getHeightMax(node.left, curr + 1);
+        int right = getHeightMax(node.right, curr + 1);
+        if (left == -1 || right == -1) return -1;
+        return Math.abs(left - right) < 2 ? Math.max(left, right) : -1;
     }
 
     private static class TreeNode {
