@@ -17,7 +17,7 @@ public class PalindromeLinkedList {
         for (int i = 0; i < size / 2; i++) {
             curr = curr.next;
         }
-        curr = reverseList(curr, null);
+        curr = reverseList(curr);
         while (curr != null) {
             if (curr.val != head.val) return false;
             curr = curr.next;
@@ -26,11 +26,19 @@ public class PalindromeLinkedList {
         return true;
     }
 
-    private ListNode reverseList(ListNode head, ListNode newHead) {
-        if (head == null) return newHead;
-        ListNode next = head.next;
-        head.next = newHead;
-        return reverseList(next, head);
+    private ListNode reverseList(ListNode head) {
+        ListNode prev = null;
+        ListNode curr = head;
+
+        while (curr != null) {
+            ListNode buff = curr;
+            curr = curr.next;
+            buff.next = prev;
+
+            prev = buff;
+        }
+
+        return prev;
     }
 
     private class ListNode {
