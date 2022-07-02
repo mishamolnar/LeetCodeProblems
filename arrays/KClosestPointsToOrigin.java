@@ -10,10 +10,46 @@ public class KClosestPointsToOrigin {
 
     public static void main(String[] args) {
         KClosestPointsToOrigin closestPointsToOrigin = new KClosestPointsToOrigin();
-        System.out.println(Arrays.deepToString(closestPointsToOrigin.kClosest(new int[][]{{3, 3,}, {5, -1}, {-2, 4}}, 2)));
+        System.out.println(Arrays.deepToString(closestPointsToOrigin.kClosest(new int[][]{{0, 1}, {1, 0}}, 2)));
     }
 
+
     public int[][] kClosest(int[][] points, int k) {
+        int left = 0, right = points.length - 1;
+        while (left <= right) {
+            int p = quickSelect(points, left, right);
+            if (p == k) break;
+            if (p < k) left = p + 1;
+            else right = p - 1;
+        }
+        int[][] res = new int[k][2];
+        System.arraycopy(points, 0, res, 0, k);
+        return res;
+    }
+
+    private int quickSelect(int[][] points, int left, int right) {
+        int[] pivot = points[right];
+        for (int i = left; i < right; i++) {
+            if (compare(points[i], pivot) <= 0) {
+                swap(points, i, left);
+                left++;
+            }
+        }
+        swap(points, left, right);
+        return left;
+    }
+
+    private int compare(int[] p1, int[] p2) {
+        return p1[0] * p1[0] + p1[1] * p1[1] - p2[0] * p2[0] - p2[1] * p2[1];
+    }
+
+    private void swap(int[][] points, int i, int j) {
+        int[] buff = points[i];
+        points[i] = points[j];
+        points[j] = buff;
+    }
+
+    public int[][] kClosestPQ(int[][] points, int k) {
         ArrayList<Point> arr = new ArrayList<>();
         for (int[] point : points) arr.add(new Point(point));
         PriorityQueue<Point> pq = new PriorityQueue<>(arr);
