@@ -5,7 +5,26 @@ public class StringToInteger {
 
     public static void main(String[] args) {
         StringToInteger stringToInteger = new StringToInteger();
-        System.out.println(stringToInteger.myAtoi("+0 123"));
+        System.out.println(stringToInteger.myAtoiTwo("+0 123"));
+    }
+
+    public int myAtoiTwo(String s) {
+        int pointer = 0, len = s.length();
+        long ans = 0;
+        boolean negative = false;
+        while (pointer < len && s.charAt(pointer) == ' ') pointer++;
+        if (pointer == len) return 0;
+        if (s.charAt(pointer) == '-') negative = true;
+        if (s.charAt(pointer) == '+' || s.charAt(pointer) == '-') pointer++;
+        if (pointer == len) return 0;
+
+        while (pointer < len && s.charAt(pointer) >= '0' && s.charAt(pointer) <= '9') {
+            if (ans * 10 + s.charAt(pointer) - '0' > Integer.MAX_VALUE) return negative ? Integer.MIN_VALUE : Integer.MAX_VALUE;
+            ans = ans * 10 + s.charAt(pointer) - '0';
+            pointer++;
+        }
+
+        return (int) (negative ? -ans : ans);
     }
 
     public int myAtoi(String str) {

@@ -7,9 +7,11 @@ import java.util.Set;
 // link - https://leetcode.com/problems/word-break/submissions/
 public class WordBreak {
 
-
-
-
+    //[length of s][size of dict][avg length of words in dict]
+    //We can usually remove [size of dict] by using Tire,
+    // remove [avg length of words in dict] by KMP,
+    // and what's more remove both [size of dict] and [avg length of words in dict] by AC-automata.
+    //AC automata is like KMP but now with linked list but with grapth
     public boolean wordBreakTwo(String s, List<String> wordDict) {
         boolean[] dp = new boolean[s.length() + 1];
         dp[0] = true;
@@ -25,7 +27,6 @@ public class WordBreak {
 
 
 
-    // n3 approach (time)/ space = n2 + wordDict
     public boolean wordBreak(String s, List<String> wordDict) {
         return wordBreak(s, 0, new HashSet<>(wordDict), new Boolean[s.length()]);
     }
@@ -43,7 +44,6 @@ public class WordBreak {
     }
 
 
-    //time - n3/ space = n2 + wordDict
     public boolean wordBreakBottomUp(String s, List<String> wordDict) {
         final int len = s.length();
         HashSet<String> hashSet = new HashSet<>(wordDict);
@@ -62,8 +62,6 @@ public class WordBreak {
     }
 
 
-    // my approach
-    // complexity O(n2m) m - dictionary length; space - O(1)
     public boolean wordBreakDictionary(String s, List<String> wordDict) {
         final int len = s.length();
         boolean[] dp = new boolean[len + 1];

@@ -68,5 +68,6 @@ public class MergeAccounts {
         System.out.println(mergeAccounts.accountsMerge(List.of(List.of("David","David0@m.co","David4@m.co","David3@m.co"),
                 List.of("David","David5@m.co","David5@m.co","David0@m.co"), List.of("David","David1@m.co","David4@m.co","David0@m.co"),
                 List.of("David","David0@m.co","David1@m.co","David3@m.co"), List.of("David","David4@m.co","David1@m.co","David3@m.co"))));
+        System.out.println("leetcode".substring(0, 4));
     }
 }
