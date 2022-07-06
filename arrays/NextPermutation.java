@@ -11,9 +11,30 @@ public class NextPermutation {
 
     public static void main(String[] args) {
         NextPermutation nextPermutation = new NextPermutation();
-        nextPermutation.nextPermutation(new int[]{4,2,0,9,9,8});
+        nextPermutation.nextPermutationTwo(new int[]{3, 2, 1});
         //4,2,0,9,9,8
     }
+
+    public void nextPermutationTwo(int[] nums) {
+        int pointerMin = nums.length - 2;
+        while (pointerMin >= 0 && nums[pointerMin] >= nums[pointerMin + 1]) pointerMin--;
+        if (pointerMin >= 0) {
+            int pointerNextMin = pointerMin + 1;
+            while (pointerNextMin < nums.length && nums[pointerNextMin] > nums[pointerMin]) pointerNextMin++;
+            swap(nums, pointerNextMin, pointerMin);
+        }
+        reverse(nums, pointerMin + 1);
+    }
+
+    private void reverse(int[] nums, int start) {
+        int i = start, j = nums.length - 1;
+        while (i < j) {
+            swap(nums, i, j);
+            i++;
+            j--;
+        }
+    }
+
 
     //space - O(1)
     //time - O(nlog(n))

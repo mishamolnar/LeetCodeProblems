@@ -10,6 +10,21 @@ public class KthSmallestElementInBST {
     private static int number = 0;
     private static int count = 0;
 
+    private int kthSmallest = -1;
+
+    public int kthSmallestTwo(TreeNode root, int k) {
+        findSmallest(root, k, 0);
+        return this.kthSmallest;
+    }
+
+    private int findSmallest(TreeNode root, int k, int prev) {
+        if (root == null) return prev;
+        int left = findSmallest(root.left, k, prev) + 1;
+        if (k == left) kthSmallest = root.val;
+        int right = findSmallest(root.right, k, left);
+        return right;
+    }
+
     public static void main(String[] args) {
         KthSmallestElementInBST KthSmallestElementInBST = new KthSmallestElementInBST();
         System.out.println(KthSmallestElementInBST.kthSmallest(new TreeNode(3, new TreeNode(1, null, new TreeNode(2)), new TreeNode(4)), 2));
