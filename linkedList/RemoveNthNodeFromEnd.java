@@ -7,6 +7,24 @@ public class RemoveNthNodeFromEnd {
             System.out.println(RemoveNthNodeFromEnd.removeNthFromEnd(new RemoveNthNodeFromEnd.ListNode(1, new RemoveNthNodeFromEnd.ListNode(2)), 2));
     }
 
+    public ListNode removeNthFromEndOnePass(ListNode head, int n) {
+        ListNode dummy = new ListNode(0);
+        ListNode slow = dummy, fast = dummy;
+        slow.next = head;
+
+        for (int i = 0; i < n; i++) {
+            fast = fast.next;
+        }
+
+        while (fast.next != null) {
+            fast = fast.next;
+            slow = slow.next;
+        }
+
+        slow.next = slow.next.next;
+        return dummy.next;
+    }
+
     //O(n) time and constant space complexity
     public ListNode removeNthFromEnd(ListNode head, int n) {
         ListNode current = head;
