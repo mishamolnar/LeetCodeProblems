@@ -1,9 +1,39 @@
 package LeetCode.dynamic;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 // link - https://leetcode.com/problems/longest-increasing-subsequence/
 public class LongestIncreasingSubsequence {
+
+    //O(n log k) time and O(k) space, where k - answer
+    public int lengthOfLISTwo(int[] nums) {
+        ArrayList<Integer> tails = new ArrayList<>();
+        for (int i : nums) {
+            int index = getNextGreaterOrZero(tails, i);
+            if (index == tails.size()) tails.add(i);
+            else tails.set(getNextGreaterOrZero(tails, i), i);
+        }
+        return tails.size();
+    }
+
+    private int getNextGreaterOrZero(ArrayList<Integer> tails, int insert) {
+        int left = 0, right = tails.size() - 1;
+        while (left <= right) {
+            int mid = left + (right - left) / 2;
+            int val = tails.get(mid);
+            if (val < insert) left = mid + 1;
+            else right = mid - 1;
+        }
+        return left;
+    }
+
+
+
+
+
+
+
 
     // Space complexity O(n)
     // Time complexity O(n^2 + n*log n) => O(n^2)
@@ -51,6 +81,6 @@ public class LongestIncreasingSubsequence {
     public static void main(String[] args) {
         LongestIncreasingSubsequence longestIncreasingSubsequence = new LongestIncreasingSubsequence();
         int[] ints = new int[]{10,9,2,5,3,7,101,18};
-        System.out.println(longestIncreasingSubsequence.lengthOfLisBinary(ints));
+        System.out.println(longestIncreasingSubsequence.lengthOfLISTwo(ints));
     }
 }
