@@ -26,7 +26,7 @@ public class PathSumII {
         curr.remove(curr.size() - 1);
     }
 
-     public class TreeNode {
+     private class TreeNode {
      int val;
      TreeNode left;
      TreeNode right;
