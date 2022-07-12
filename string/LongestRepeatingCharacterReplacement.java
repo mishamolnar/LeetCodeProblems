@@ -9,10 +9,22 @@ import java.util.List;
 // link -
 public class LongestRepeatingCharacterReplacement {
 
-
-
-
-
+    public int characterReplacementTwo(String s, int k) {
+        HashMap<Character, Integer> map = new HashMap<>();
+        int maxFreq = 0, res = 0, left = 0;
+        for (int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+            int freq = map.getOrDefault(c, 0) + 1;
+            maxFreq = Math.max(maxFreq, freq);
+            map.put(c, freq);
+            while (i - left + 1 - maxFreq > k) {
+                char toDelete = s.charAt(left++);
+                map.put(toDelete, map.get(toDelete) - 1);
+            }
+            res = Math.max(i - left + 1, res);
+        }
+        return res;
+    }
 
     public int characterReplacementSecondTry(String s, int k) {
         HashMap<Character, Integer> hashMap = new HashMap<>();
@@ -67,6 +79,6 @@ public class LongestRepeatingCharacterReplacement {
 
     public static void main(String[] args) {
         LongestRepeatingCharacterReplacement longestRepeatingCharacterReplacement = new LongestRepeatingCharacterReplacement();
-        System.out.println(longestRepeatingCharacterReplacement.characterReplacementWithMaxFrequency("AABABBA", 1));
+        System.out.println(longestRepeatingCharacterReplacement.characterReplacementTwo("AABABBA", 1));
     }
 }
