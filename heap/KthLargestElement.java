@@ -4,6 +4,43 @@ import java.util.*;
 
 public class KthLargestElement {
 
+
+
+
+    public int findKthLargestSelect(int[] nums, int k) {
+        int left = 0, right = nums.length - 1;
+        k = nums.length - k;
+        while (true) {
+            int p = quickSelect(nums, left, right);
+            if (p == k) return nums[p];
+            if (p > k) right = p - 1;
+            else left = p + 1;
+        }
+    }
+
+    private int quickSelect(int[] nums, int left, int right) {
+        int pivot = nums[right];
+        for (int i = left; i < right; i++) {
+            if (nums[i] < pivot) {
+                exch(nums, left, i);
+                left++;
+            }
+        }
+        exch(nums, left, right);
+        return left;
+    }
+
+
+    private static void exch(int[] a, int i, int j) {
+        if (i == j) return;
+        int buff = a[i];
+        a[i] = a[j];
+        a[j] = buff;
+    }
+
+
+
+
     // construct pq = O(n), but retrieve - O(logn) total complexity - O(n) + k*log(n)
     public int findKthLargest(int[] nums, int k) {
         List<Integer> input = new ArrayList<>(nums.length);
@@ -49,12 +86,6 @@ public class KthLargestElement {
 
         exch(a, lo, j);
         return j;
-    }
-
-    private static void exch(int[] a, int i, int j) {
-        int buff = a[i];
-        a[i] = a[j];
-        a[j] = buff;
     }
 
 
