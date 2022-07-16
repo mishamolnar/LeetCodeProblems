@@ -27,7 +27,11 @@ public class LargestNumber {
                 return 0;
             }
         };
-        String result = Arrays.stream(nums).mapToObj(String::valueOf).sorted(comparator).collect(Collectors.joining());
+        String result = Arrays.stream(nums)
+                .mapToObj(String::valueOf)
+                .sorted(comparator)
+                .parallel()
+                .collect(Collectors.joining());
         if (result.charAt(0) == '0') return "0";
         return result;
     }
