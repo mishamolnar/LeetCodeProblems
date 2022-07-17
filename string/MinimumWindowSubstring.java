@@ -5,6 +5,41 @@ import java.util.HashMap;
 // link https://leetcode.com/problems/minimum-window-substring/
 public class MinimumWindowSubstring {
 
+
+
+
+
+
+    //Input: s = "ADOBECODEBANC", t = "ABC"
+    //Output: "BANC"
+    public String minWindowTwo(String s, String t) {
+        HashMap<Character, Integer> have = new HashMap<>();
+        HashMap<Character, Integer> need = new HashMap<>();
+        for (int i = 0; i < t.length(); i++)
+            need.put(t.charAt(i), need.getOrDefault(t.charAt(i), 0) + 1);
+        int totalNeed = t.length(), totalHave = 0, resLen = Integer.MAX_VALUE, left = 0;
+        String res = "";
+        for (int right = 0; right < s.length(); right++) {
+            char c = s.charAt(right);
+            if (have.getOrDefault(c, 0) < need.getOrDefault(c, 0)) totalHave++;
+            have.put(c, have.getOrDefault(c, 0) + 1);
+            while (totalHave >= totalNeed) {
+                if (right - left + 1 < resLen) res = s.substring(left, right + 1);
+                resLen = Math.min(resLen, right - left + 1);
+                char toDelete = s.charAt(left++);
+                if (have.get(toDelete) <= need.getOrDefault(toDelete, 0)) totalHave--;
+                have.put(toDelete, have.get(toDelete) - 1);
+            }
+        }
+        return res;
+    }
+
+
+
+
+
+
+
     // sliding window problem
     // complexity time - O(n + s) and space - O(n)
     // totalHave - how many of needed characters are in current string
@@ -114,6 +149,6 @@ public class MinimumWindowSubstring {
 
     public static void main(String[] args) {
         MinimumWindowSubstring minimumWindowSubstring = new MinimumWindowSubstring();
-        System.out.println(minimumWindowSubstring.minWindowOptimized("ADOBECODEBANC", "ABC"));
+        System.out.println(minimumWindowSubstring.minWindowTwo("cabwefgewcwaefgcf", "cae"));
     }
 }

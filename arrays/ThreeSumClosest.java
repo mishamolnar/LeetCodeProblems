@@ -8,6 +8,23 @@ public class ThreeSumClosest {
 
     }
 
+    public int threeSumClosestTwo(int[] nums, int target) {
+        Arrays.sort(nums);
+        int res = 0, minDiff = Integer.MAX_VALUE;
+        for (int s1 = 0; s1 < nums.length; s1++) {
+            int left = s1 + 1, right = nums.length - 1;
+            while (left < right) {
+                int num = nums[s1] + nums[left] + nums[right];
+                if (Math.abs(target - num) < minDiff) res = num;
+                minDiff = Math.min(minDiff, Math.abs(target - num));
+                if (num == target) return num;
+                if (num < target) left++;
+                else right--;
+            }
+        }
+        return res;
+    }
+
     public int threeSumClosest(int[] nums, int target) {
         int minDiff = Integer.MAX_VALUE, sum = 0;
         Arrays.sort(nums);
