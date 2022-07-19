@@ -4,60 +4,59 @@ import java.util.*;
 
 public class MergeKLists {
 
-    //complexity - O(n * log k), where k is length of lists and n number of all nodes
+
     public ListNode mergeKLists(ListNode[] lists) {
-        ArrayList<ListNode> list = new ArrayList<>(Arrays.asList(lists));
-        while (list.size() != 1) {
-            ListNode first = list.get(list.size() - 1);
-            list.remove(list.size() - 1);
-            ListNode second = list.get(list.size() - 1);
-            list.remove(list.size() - 1);
-            list.add(mergeTwoLists(first, second));
-        }
-        return list.get(0);
-    }
-
-    private ListNode mergeTwoLists(ListNode list1, ListNode list2) {
-        if (list1 == null) return list2;
-        if (list2 == null) return list1;
-        if (list1.val < list2.val) {
-            list1.next = mergeTwoLists(list1.next, list2);
-            return list1;
-        } else {
-            list2.next = mergeTwoLists(list1, list2.next);
-            return list2;
-        }
-    }
-
-    // complexity O(n) where n number of all nodes
-    public ListNode mergeKListsWithPQ(ListNode[] lists) {
-        if (lists == null||lists.length == 0) return null;
-
-        PriorityQueue<ListNode> queue= new PriorityQueue<ListNode>(lists.length, new Comparator<ListNode>(){
-            @Override
-            public int compare(ListNode o1,ListNode o2){
-                if (o1.val<o2.val)
-                    return -1;
-                else if (o1.val==o2.val)
-                    return 0;
-                else
-                    return 1;
+        if (lists.length == 0) return null;
+        int actualSize = lists.length;
+        while (actualSize > 1) {
+            int newSize = 0, pointer = 0;
+            while (pointer < actualSize) {
+                if (pointer + 1 == actualSize) {
+                    lists[newSize] = lists[pointer];
+                    pointer++;
+                    continue;
+                }
+                lists[newSize] = mergeTwoLists(lists[pointer], lists[pointer + 1]);
+                newSize++;
+                pointer += 2;
             }
-        });
+            actualSize = newSize;
+        }
+        return lists[0];
+    }
+
+    private ListNode mergeTwoLists(ListNode one, ListNode two) {
+        ListNode dummy = new ListNode(0);
+        ListNode curr = dummy;
+        while (one != null && two != null) {
+            if (one.val < two.val) {
+                curr.next = one;
+                one = one.next;
+            } else {
+                curr.next = two;
+                two = two.next;
+            }
+            curr = curr.next;
+        }
+        curr.next = one == null ? two : one;
+        return dummy.next;
+    }
+
+
+
+
+    // n log k, where n - length of the list, k - number of lists
+    public ListNode mergeKListsTwo(ListNode[] lists) {
+        PriorityQueue<ListNode> pq = new PriorityQueue<>((a, b) -> a.val - b.val);
+        for (ListNode node : lists)
+            if (node != null) pq.add(node);
 
         ListNode dummy = new ListNode(0);
-        ListNode tail=dummy;
-
-        for (ListNode node: lists)
-            if (node!=null)
-                queue.add(node);
-
-        while (!queue.isEmpty()){
-            tail.next=queue.poll();
-            tail=tail.next;
-
-            if (tail.next!=null)
-                queue.add(tail.next);
+        ListNode curr = dummy;
+        while (!pq.isEmpty()) {
+            curr.next = pq.poll();
+            curr = curr.next;
+            if (curr.next != null) pq.add(curr.next);
         }
         return dummy.next;
     }
