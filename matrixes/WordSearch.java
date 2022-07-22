@@ -22,7 +22,7 @@ public class WordSearch {
     }
 
     //complexity - O(L) where L - length of the word
-    // O(MN 3^L) for time
+    // O(MN 3^MN) for time
     private boolean dfs(char[][] board, String word, int pointer, int x, int y) {
         if (pointer >= word.length()) return true;
         if (x < 0 || y < 0 || x >= board.length || y >= board[0].length
@@ -36,13 +36,6 @@ public class WordSearch {
         board[x][y] = buff;
         return res;
     }
-
-
-
-
-
-
-
 
 
 
