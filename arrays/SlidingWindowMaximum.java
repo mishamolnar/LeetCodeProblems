@@ -21,6 +21,20 @@ public class SlidingWindowMaximum {
         return res;
     }
 
+    public int[] maxSlidingWindowII(int[] nums, int k) {
+        Deque<int[]> dq = new ArrayDeque<>(); //0 index, 1 value
+        int[] res = new int[nums.length - k + 1];
+        for (int i = 0; i < nums.length; i++) {
+            while (!dq.isEmpty() && dq.peekFirst()[1] <= nums[i])
+                dq.pollFirst();
+            if (!dq.isEmpty() && dq.peekLast()[0] <= i - k)
+                dq.pollLast();
+            dq.addFirst(new int[]{i, nums[i]});
+            res[Math.max(0, i - k + 1)] = dq.getLast()[1];
+        }
+        return res;
+    }
+
     public static void main(String[] args) {
         SlidingWindowMaximum slidingWindowMaximum = new SlidingWindowMaximum();
         System.out.println(Arrays.toString(slidingWindowMaximum.maxSlidingWindow(new int[]{1, 3, -1, -3, 5, 3, 6, 7}, 3)));
