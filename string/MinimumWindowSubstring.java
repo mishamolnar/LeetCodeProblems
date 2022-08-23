@@ -1,12 +1,41 @@
 package LeetCode.string;
 
 import java.util.HashMap;
+import java.util.Map;
 
 // link https://leetcode.com/problems/minimum-window-substring/
 public class MinimumWindowSubstring {
 
 
 
+    public String minWindowIII(String s, String t) {
+        Map<Character, Integer> target = new HashMap<>();
+        for (int i = 0; i < t.length(); i++) {
+            target.put(t.charAt(i), target.getOrDefault(t.charAt(i), 0) + 1);
+        }
+        Map<Character, Integer> dict = new HashMap<>();
+        int count = 0, targetCount = t.length(), left = 0;
+        int resLen = Integer.MAX_VALUE, resLeft = 0, resRight = 0;
+        for (int right = 0; right < s.length(); right++) {
+            Character c = s.charAt(right);
+            dict.put(c, dict.getOrDefault(c, 0) + 1);
+            if (dict.get(c) <= target.getOrDefault(c, 0)) count++;
+            while (true) {
+                Character toRemove = s.charAt(left);
+                if (dict.get(toRemove) > target.getOrDefault(toRemove, 0)){
+                    left++;
+                    dict.put(toRemove, dict.get(toRemove) - 1);
+                }
+                else break;
+            }
+            if (count >= targetCount && right - left + 1 < resLen) {
+                resLen = right - left + 1;
+                resLeft = left;
+                resRight = right;
+            }
+        }
+        return s.substring(resLeft, resRight + 1);
+    }
 
 
 
@@ -149,6 +178,6 @@ public class MinimumWindowSubstring {
 
     public static void main(String[] args) {
         MinimumWindowSubstring minimumWindowSubstring = new MinimumWindowSubstring();
-        System.out.println(minimumWindowSubstring.minWindowTwo("cabwefgewcwaefgcf", "cae"));
+        System.out.println(minimumWindowSubstring.minWindowIII("a", "aa"));
     }
 }
