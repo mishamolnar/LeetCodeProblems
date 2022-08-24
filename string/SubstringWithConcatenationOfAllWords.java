@@ -5,6 +5,52 @@ import java.util.stream.Collectors;
 
 public class SubstringWithConcatenationOfAllWords {
 
+
+
+
+
+
+    public List<Integer> findSubstringTwo(String s, String[] words) {
+        HashMap<String, Integer> dict = new HashMap<>();
+        for (String word : words)
+            dict.put(word, dict.getOrDefault(word, 0) +1);
+        int len = words[0].length();
+        List<Integer> res = new ArrayList<>();
+        for (int i = 0; i < len; i++) {
+            res.addAll(findStart(s, dict, len, i, len * words.length));
+        }
+        return res;
+    }
+
+    private List<Integer> findStart(String s, HashMap<String, Integer> dict, int len, int start, int total) {
+        HashMap<String, Integer> target = new HashMap<>(dict);
+        List<Integer> res = new ArrayList<>();
+        int left = start;
+        for (int i = start; i <= s.length() - len; i += len) {
+            if (i - left >= total) {
+                String toAdd = s.substring(left, left + len);
+                target.put(toAdd, target.get(toAdd) + 1);
+                left += len;
+            }
+
+            String buff = s.substring(i, i + len);
+            if (target.containsKey(buff)) {
+                target.put(buff, target.get(buff) - 1);
+                while (target.get(buff) < 0) {
+                    String toAdd = s.substring(left, left + len);
+                    target.put(toAdd, target.get(toAdd) + 1);
+                    left += len;
+                }
+                if (i - left == total - len)
+                    res.add(left);
+            } else {
+                target = new HashMap<>(dict);
+                left = i + len;
+            }
+        }
+        return res;
+    }
+
     //good lienear time solution but it returns for
     //"aaaaaaaaaaaaaa"
     //["aa","aa"]
@@ -97,7 +143,7 @@ public class SubstringWithConcatenationOfAllWords {
 
     public static void main(String[] args) {
         SubstringWithConcatenationOfAllWords substringWithConcatenationOfAllWords = new SubstringWithConcatenationOfAllWords();
-        System.out.println(substringWithConcatenationOfAllWords.findSubstring("wordgoodgoodgoodbestword",
+        System.out.println(substringWithConcatenationOfAllWords.findSubstringTwo("wordgoodgoodgoodbestword",
                 new String[]{"word", "good", "best", "good"}));
     }
 
