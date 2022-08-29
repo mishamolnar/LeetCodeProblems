@@ -4,29 +4,28 @@ package LeetCode.arrays;
 public class SortColors {
     public static void main(String[] args) {
         SortColors sortColors = new SortColors();
-        sortColors.sortColors(new int[]{2,0,1});
+        sortColors.sortColors(new int[]{2,1,2});
     }
 
     public void sortColors(int[] nums) {
-        int left = 0, right = nums.length - 1;
-        for (int i = 0; i < nums.length;) {
-            if (i == right) break;
-            if (nums[i] == 1) {
-                i++;
-            } else if (nums[i] == 0) {
-                exch(nums, left, i);
-                i++;
+        int left = 0, right = nums.length - 1, curr = 0;
+        while (curr <= right) {
+            if (nums[curr] == 0) {
+                swap(nums, curr, left);
                 left++;
-            } else if (nums[i] == 2) {
-                exch(nums, right, i);
+                curr++;
+            } else if (nums[curr] == 1) {
+                curr++;
+            } else {
+                swap(nums, right, curr);
                 right--;
             }
         }
     }
 
-    private void exch(int[] nums, int a, int b) {
-        int buff = nums[a];
-        nums[a] = nums[b];
-        nums[b] = buff;
+    private void swap(int[] nums, int left, int right) {
+        int buff = nums[left];
+        nums[left] = nums[right];
+        nums[right] = buff;
     }
 }
