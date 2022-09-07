@@ -1,13 +1,35 @@
 package LeetCode.string;
 
+import java.util.ArrayDeque;
 import java.util.Arrays;
+import java.util.Deque;
+import java.util.Map;
 
 //https://leetcode.com/problems/remove-all-adjacent-duplicates-in-string-ii/
 public class RemoveAllAdjacentDuplicatesInStringII {
 
+
+
+    public String removeDuplicatesII(String s, int k) {
+        Deque<Map.Entry<Character, Integer>> stack = new ArrayDeque<>();
+        for (int i = 0; i < s.length(); i++) {
+            char curr = s.charAt(i);
+            if (!stack.isEmpty() && stack.peek().getKey() == curr) {
+                stack.push(Map.entry(stack.peek().getKey(), stack.poll().getValue() + 1));
+                if (stack.peek().getValue() == k)
+                    stack.pop();
+            }
+            else stack.push(Map.entry(curr, 1));
+        }
+        StringBuilder res = new StringBuilder();
+        while (!stack.isEmpty())
+            res.append(String.valueOf(stack.peekLast().getKey()).repeat(stack.pollLast().getValue()));
+        return res.toString();
+    }
+
     public static void main(String[] args) {
         RemoveAllAdjacentDuplicatesInStringII remove = new RemoveAllAdjacentDuplicatesInStringII();
-        System.out.println(remove.removeDuplicates("deeedbbcccbdaa", 3));
+        System.out.println(remove.removeDuplicatesII("deeedbbcccbdaakk", 3));
     }
 
 
