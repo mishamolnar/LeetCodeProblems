@@ -4,6 +4,32 @@ package LeetCode.arrays;
 public class LargestRectangleInHistogram {
 
 
+    public int largestRectangleAreaII(int[] heights) {
+        int len = heights.length;
+        int[] lessLeft = new int[len];
+        for (int i = 0; i < len; i++) {
+            int nextLess = i - 1;
+            while (nextLess >= 0 && heights[nextLess] >= heights[i])
+                nextLess = lessLeft[nextLess];
+            lessLeft[i] = nextLess;
+        }
+
+        int[] lessRight = new int[len];
+        for (int i = len - 1; i >= 0; i--) {
+            int nextLess = i + 1;
+            while (nextLess < len && heights[nextLess] >= heights[i])
+                nextLess = lessRight[nextLess];
+            lessRight[i] = nextLess;
+        }
+
+        int res = 0;
+        for (int i = 0; i < len; i++) {
+            res = Math.max(res, (lessRight[i] - lessLeft[i] - 1) * heights[i]);
+        }
+        return res;
+    }
+
+
     public int largestRectangleArea(int[] heights) {
         int[] lessLeft = new int[heights.length];
         for (int i = 0; i < heights.length; i++) {
@@ -32,6 +58,6 @@ public class LargestRectangleInHistogram {
 
     public static void main(String[] args) {
         LargestRectangleInHistogram histogram = new LargestRectangleInHistogram();
-        System.out.println(histogram.largestRectangleArea(new int[]{2,1,3,4,1,4,1,3}));
+        System.out.println(histogram.largestRectangleAreaII(new int[]{2,1,2}));
     }
 }
