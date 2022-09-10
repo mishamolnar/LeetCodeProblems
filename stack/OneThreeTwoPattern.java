@@ -8,6 +8,19 @@ import java.util.Stack;
 //https://leetcode.com/problems/132-pattern/submissions/
 public class OneThreeTwoPattern {
 
+    public boolean find132patternIII(int[] nums) {
+        Stack<Integer> stack = new Stack<>();
+        int sec = Integer.MIN_VALUE;
+        for (int i = nums.length - 1; i >= 0; i--) {
+            while (!stack.isEmpty() && stack.peek() < nums[i])
+                sec = stack.pop();
+            stack.add(nums[i]);
+            if (sec > nums[i])
+                return true;
+        }
+        return false;
+    }
+
 
 
 
