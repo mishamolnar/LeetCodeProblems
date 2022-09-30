@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 // link - https://leetcode.com/problems/the-skyline-problem/
 public class SkylineProblem {
 
-    public List<List<Integer>> getSkyline(int[][] buildings) {
+    public List<List<Integer>> getSkylineII(int[][] buildings) {
         int[][] heights = new int[buildings.length * 2][2];
         for (int i = 0; i < buildings.length; i++) {
             heights[i * 2] = new int[]{buildings[i][0], - buildings[i][2]}; // негативна висота для початку будівлі
@@ -32,8 +32,34 @@ public class SkylineProblem {
         return result;
     }
 
+
+
+
+    public List<List<Integer>> getSkyline(int[][] buildings) {
+        List<int[]> arr = new ArrayList<>();
+        for (int[] building : buildings) {
+            arr.add(new int[]{building[0], building[2]});
+            arr.add(new int[]{building[1], -building[2]});
+        }
+
+        arr.sort((a, b) -> a[0] != b[0] ? a[0] - b[0] : b[1] - a[1]);
+        TreeMap<Integer, Integer> map = new TreeMap<>();
+        List<List<Integer>> list = new ArrayList<>();
+        for (int[] dot : arr) {
+            map.put(Math.abs(dot[1]), map.getOrDefault(Math.abs(dot[1]), 0) + (dot[1] > 0 ? 1 : -1));
+            if (map.get(Math.abs(dot[1])) == 0)
+                map.remove(Math.abs(dot[1]));
+            int ceil = map.isEmpty() ? 0 : map.lastKey();
+            if (list.isEmpty() || list.get(list.size() - 1).get(1) != ceil)
+                list.add(List.of(dot[0], ceil));
+        }
+
+        return list;
+    }
+
     public static void main(String[] args) {
         SkylineProblem skylineProblem = new SkylineProblem();
-        System.out.println(skylineProblem.getSkyline(new int[][]{{1,2,1},{1, 2, 2},{1, 2, 3}}));
+//        System.out.println(skylineProblem.getSkyline(new int[][]{{1,2,1},{1, 2, 2},{1, 2, 3}}));
+        System.out.println(skylineProblem.getSkyline(new int[][]{{2,9,10},{3,7,15},{5,12,12},{15,20,10},{19,24,8}}));
     }
 }
