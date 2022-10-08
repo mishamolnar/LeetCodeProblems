@@ -1,38 +1,55 @@
 package LeetCode.tree;
 
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 
 class RangeModule {
-    TreeMap<Integer, Boolean> map;
+    TreeMap<Integer, Integer> map;
+    public RangeModule() {
+        map = new TreeMap<>();
+    }
 
-//    public RangeModule() {
-//
-//    }
-//
-//    public void addRange(int left, int right) {
-//
-//    }
-//
-//    public boolean queryRange(int left, int right) {
-//
-//    }
+    public void addRange(int left, int right) {
+        if (right <= left) return;
+        Integer start = map.floorKey(left);
+        Integer end = map.floorKey(right);
+        if (start == null && end == null) {
+            map.put(left, right);
+        } else if (start != null && map.get(start) >= left) {
+            map.put(start, Math.max(map.get(end), Math.max(map.get(start), right)));
+        } else {
+            map.put(left, Math.max(map.get(end), right));
+        }
+        // clean up intermediate intervals
+        Map<Integer, Integer> subMap = map.subMap(left, false, right, true);
+        Set<Integer> set = new HashSet(subMap.keySet());
+        map.keySet().removeAll(set);
+    }
 
-//    public static void main(String[] args) {
-//        RangeModule rangeModule = new RangeModule();
-//        rangeModule.addRange(10, 20);
-//        rangeModule.removeRange(14, 16);
-//        rangeModule.queryRange(10, 14); // return True,(Every number in [10, 14) is being tracked)
-//        rangeModule.queryRange(13, 15); // return False,(Numbers like 14, 14.03, 14.17 in [13, 15) are not being tracked)
-//        rangeModule.queryRange(16, 17); // return True, (The number 16 in [16, 17) is still being tracked, despite the remove operation)
-//    }
+    public boolean queryRange(int left, int right) {
+        Integer start = map.floorKey(left);
+        if (start == null) return false;
+        return map.get(start) >= right;
+    }
 
-//    public static void main(String[] args) {
-//        RangeModule rangeModule = new RangeModule();
-//        rangeModule.addRange(10, 180);
-//        rangeModule.addRange(150, 200);
-//        rangeModule.addRange(250, 500);
-//        System.out.println(rangeModule.queryRange(50, 100));
-//    }
+    public void removeRange(int left, int right) {
+        if (right <= left) return;
+        Integer start = map.floorKey(left);
+        Integer end = map.floorKey(right);
+        if (end != null && map.get(end) > right) {
+            map.put(right, map.get(end));
+        }
+        if (start != null && map.get(start) > left) {
+            map.put(start, left);
+        }
+        // clean up intermediate intervals
+        Map<Integer, Integer> subMap = map.subMap(left, true, right, false);
+        Set<Integer> set = new HashSet(subMap.keySet());
+        map.keySet().removeAll(set);
+
+    }
 }
 
 /**
