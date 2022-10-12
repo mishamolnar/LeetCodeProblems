@@ -22,5 +22,6 @@ public class SplittingStringIntoDescendingConsecutiveValues {
         SplittingStringIntoDescendingConsecutiveValues split = new SplittingStringIntoDescendingConsecutiveValues();
         System.out.println(split.splitString("1234"));
         System.out.println(split.splitString("10"));
+        System.out.println(Integer.parseInt(null));
     }
 }
