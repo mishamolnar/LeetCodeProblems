@@ -1,6 +1,9 @@
 package LeetCode.tree;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class ReplaceWords {
     public String replaceWords(List<String> dictionary, String sentence) {
@@ -13,6 +16,21 @@ public class ReplaceWords {
             sb.append(getMinimum(root, s)).append(" ");
         }
         return sb.deleteCharAt(sb.length() - 1).toString();
+    }
+
+    public int longestPalindrome(String[] words) {
+        Set<String> set = new HashSet<>();
+        List<String> res = new ArrayList<>();
+        for (String word : words) {
+            String reversed = new StringBuilder(word).reverse().toString();
+            if (set.contains(reversed)) {
+                set.remove(word);
+                set.remove(reversed);
+                res.add(word);
+                res.add(reversed);
+            } else set.add(word);
+        }
+        return res.size() * 2 + (set.stream().anyMatch((a) -> a.charAt(0) == a.charAt(1)) ? 2 : 0);
     }
 
     private String getMinimum(TrieNode root, String word) {
