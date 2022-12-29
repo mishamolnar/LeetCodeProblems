@@ -3,6 +3,7 @@ package LeetCode.backTracking;
 import java.awt.event.ItemEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Stack;
 
@@ -17,6 +18,17 @@ public class Permutation {
         boolean[] available = new boolean[nums.length];
         Arrays.fill(available, true);
         helper(result, new ArrayList<>(), available, nums);
+        result.sort(new Comparator<List<Integer>>() {
+            @Override
+            public int compare(List<Integer> o1, List<Integer> o2) {
+                for (int i = 0; i < o1.size(); i++) {
+                    if (!o1.get(i).equals(o2.get(i))) {
+                        return Integer.compare(o1.get(i), o2.get(i));
+                    }
+                }
+                return 0;
+            }
+        });
         return result;
     }
 
@@ -34,6 +46,6 @@ public class Permutation {
 
     public static void main(String[] args) {
         Permutation permutation = new Permutation();
-        System.out.println(permutation.permute(new int[]{1, 2, 3, 5, 6, 7, 8, 9, 10}));
+        System.out.println(permutation.permute(new int[]{1, 1, 1, 1, 2}));
     }
 }
