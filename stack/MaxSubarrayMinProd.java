@@ -42,6 +42,6 @@ public class MaxSubarrayMinProd {
 
     public static void main(String[] args) {
         MaxSubarrayMinProd max = new MaxSubarrayMinProd();
-        System.out.println(max.maxSumMinProduct(new int[]{2,5,4,2,4,5,3,1,2,4}));
+        System.out.println(max.maxSumMinProduct(new int[]{2,3,2,1}));
     }
 }

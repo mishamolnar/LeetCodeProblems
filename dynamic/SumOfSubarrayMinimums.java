@@ -34,6 +34,6 @@ public class SumOfSubarrayMinimums {
 
     public static void main(String[] args) {
         SumOfSubarrayMinimums sum = new SumOfSubarrayMinimums();
-        System.out.println(sum.sumSubarrayMins(new int[]{11,81,94,43,3}));
+        System.out.println(sum.sumSubarrayMins(new int[]{2,3,2,1}));
     }
 }
