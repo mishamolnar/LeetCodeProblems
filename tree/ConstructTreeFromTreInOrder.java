@@ -10,7 +10,7 @@ public class ConstructTreeFromTreInOrder {
     public static void main(String[] args) {
         ConstructTreeFromTreInOrder constructTreeFromTreInOrder = new ConstructTreeFromTreInOrder();
         TreeNode root = constructTreeFromTreInOrder.buildTree(new int[]{3,1,2,4}, new int[]{1,2,3,4});
-        System.out.println("DONE");
+        System.out.println("catdog".substring(3, 6));
     }
 
     public TreeNode buildTreeTwo(int[] preorder, int[] inorder) {
