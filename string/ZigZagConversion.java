@@ -1,5 +1,7 @@
 package LeetCode.string;
 
+import java.util.Arrays;
+
 //https://leetcode.com/problems/zigzag-conversion/
 public class ZigZagConversion {
     public static void main(String[] args) {
@@ -17,5 +19,25 @@ public class ZigZagConversion {
             }
         }
         return String.valueOf(result);
+    }
+
+
+
+    public String convertTwo(String s, int numRows) {
+        if (numRows == 1) return s;
+        StringBuilder[] sbs = new StringBuilder[numRows];
+        for (int i = 0; i < sbs.length; i++) sbs[i] = new StringBuilder();
+        int row = 0, diff = -1;
+        for (char curr : s.toCharArray()) {
+            if (row == 0 || row == numRows - 1) {
+                diff = -diff;
+            }
+            sbs[row].append(curr);
+            row += diff;
+        }
+        return Arrays.stream(sbs).
+                reduce(new StringBuilder(), StringBuilder::append)
+                .toString();
+
     }
 }
