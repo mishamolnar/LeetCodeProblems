@@ -4,7 +4,7 @@ import java.util.HashSet;
 
 public class NamingACompany {
     public long distinctNames(String[] ideas) {
-        HashSet<String>[] groups = new HashSet<>[26];
+        HashSet<String>[] groups = new HashSet[26];
         for (String idea : ideas) {
             groups[idea.charAt(0) - 'a'].add(idea.substring(1));
         }
