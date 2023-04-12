@@ -8,7 +8,7 @@ import java.util.Stack;
 public class SimplifyPath {
     public static void main(String[] args) {
         SimplifyPath simplifyPath = new SimplifyPath();
-        System.out.println(simplifyPath.simplifyPath("/../"));
+        System.out.println(simplifyPath.simplifyPathTwo("/home/"));
     }
 
     public String simplifyPath(String path) {
@@ -39,5 +39,23 @@ public class SimplifyPath {
         String res = "";
         for (String dir : stack) res = "/" + dir + res; //connecting all components
         return res.isEmpty() ? "/" : res;
+    }
+
+
+    public String simplifyPathTwo(String path) {
+        String[] arr = path.split("/+");
+        int pointer = 0;
+        for (String dir : arr) {
+            if (dir.equals("..")) {
+                pointer = Math.max(0, pointer - 1);
+            } else if (!dir.equals(".") && !dir.isEmpty()) {
+                arr[pointer++] = dir;
+            }
+        }
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < pointer; i++) {
+            sb.append("/").append(arr[i]);
+        }
+        return sb.length() == 0 ? "/" : sb.toString();
     }
 }
