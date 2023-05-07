@@ -45,6 +45,7 @@ public class SegmentTree {
         int mid = currLeft + (currRight - currLeft) / 2;
         arr[vertex * 2] += arr[vertex];
         arr[vertex * 2 + 1] += arr[vertex];
+        arr[vertex] = 0;
         if (n <= mid) {
             return getN(vertex * 2, currLeft, mid, n);
         } else {
