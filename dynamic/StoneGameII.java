@@ -24,6 +24,7 @@ public class StoneGameII {
     }
 
     //bob min, alice max
+    //but it always returns the score of alice
     private int stoneGameII(int user, int index, int m, int[][][] memo, int[] piles) {
         if (index == piles.length) {
             return 0;
