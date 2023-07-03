@@ -1,5 +1,8 @@
 package LeetCode.graph;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MaximumNumberOfAchievableTransferRequests {
 
     //bitmask + combinations
@@ -38,5 +41,20 @@ public class MaximumNumberOfAchievableTransferRequests {
     public static void main(String[] args) {
         System.out.println(1 << 0);
         System.out.println(Integer.bitCount(12));
+    }
+
+    public boolean buddyStrings(String s, String goal) {
+        if (s.equals(goal)) {
+            return s.chars().distinct().count() < s.length();
+        }
+        List<Integer> missMatch = new ArrayList<>();
+        for (int i = 0; i < s.length(); i++) {
+            if (s.charAt(i) != goal.charAt(i)) {
+                missMatch.add(i);
+            }
+        }
+        return missMatch.size() == 2 &&
+                (s.charAt(missMatch.get(0)) == goal.charAt(missMatch.get(1))
+                && s.charAt(missMatch.get(1)) == s.charAt(missMatch.get(0)));
     }
 }
