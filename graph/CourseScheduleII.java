@@ -44,4 +44,43 @@ public class CourseScheduleII {
         onStack[curr] = false;
         res.add(curr);
     }
+
+
+    public int[] findOrderII(int numCourses, int[][] prerequisites) {
+        List<Integer>[] graph = new List[numCourses];
+        for (int i = 0; i < numCourses; i++)
+            graph[i] = new ArrayList<>();
+        for (int[] pre : prerequisites) {
+            graph[pre[0]].add(pre[1]);
+        }
+        boolean[] visited = new boolean[numCourses];
+        boolean[] stack = new boolean[numCourses];
+        List<Integer> answer = new ArrayList<>();
+        for (int i = 0; i < numCourses; i++) {
+            if (!createSchedule(i, graph, visited, stack, answer))
+                return new int[0];
+        }
+        int[] ans = new int[numCourses];
+        for (int i = 0; i < ans.length; i++)
+            ans[i] = answer.get(i);
+        return ans;
+    }
+
+
+    private boolean createSchedule(int curr, List<Integer>[] graph, boolean[] visited, boolean[] stack, List<Integer> answer) {
+        if (visited[curr])
+            return true;
+        visited[curr] = true;
+        stack[curr] = true;
+        for (int next : graph[curr]) {
+            if (stack[next]) {
+                return false;
+            } else if (!visited[next] && !createSchedule(next, graph, visited, stack, answer)) {
+                return false;
+            }
+        }
+        stack[curr] = false;
+        answer.add(curr);
+        return true;
+    }
 }

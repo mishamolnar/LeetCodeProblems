@@ -7,73 +7,39 @@ import java.util.List;
 
 //link = https://leetcode.com/problems/course-schedule/submissions/
 public class CourseSchedule {
-    private boolean[] isMarked;
-    private boolean[] onStack;
-    private int[] edgeTo;
-    private boolean hasCycle;
-
-    // dfs solution time complexity O(E + V)
-    // space complexity O(E+ V)
-    // BFS solution is possible also -> run bfs on all nodes and check if count == numCourses
     public boolean canFinish(int numCourses, int[][] prerequisites) {
-        List<Integer>[] vertices = new LinkedList[numCourses];
-        for (int i = 0; i < numCourses; i++) {
-            vertices[i] = new LinkedList<>();
+        //plan: create a graph -> where (a) -> (b) indicates first a then b
+        //then create array visited and create array inStack
+        //then detect cycle by array inStack
+        List<Integer>[] graph = new List[numCourses];
+        for (int i = 0; i < numCourses; i++) graph[i] = new ArrayList<>();
+        for (int[] prerequisite : prerequisites) {
+            graph[prerequisite[1]].add(prerequisite[0]);
         }
-        for (int[] pre : prerequisites) {
-            vertices[pre[1]].add(pre[0]);
-        }
-        isMarked = new boolean[numCourses];
-        onStack = new boolean[numCourses];
-        edgeTo = new int[numCourses];
+        boolean[] stack = new boolean[numCourses];
+        boolean[] visited = new boolean[numCourses];
         for (int i = 0; i < numCourses; i++) {
-            dfs(vertices, i);
-            if (hasCycle) return false;
+            if (hasCycle(i, -1, graph, stack, visited))
+                return false;
         }
         return true;
     }
 
-    private void dfs(List<Integer>[] G, int V) {
-        onStack[V] = true;
-        isMarked[V] = true;
-        for (Integer w : G[V]) {
-            if (hasCycle) return;
-            if (!isMarked[w]) {
-                edgeTo[w] = V;
-                dfs(G, w); // стандартна dfs
-            }
-            if (onStack[w]) {
-                hasCycle = true; // якщо рекурсія прийшла в один з тих вузлів, де ще сама не закінчилась - ми знайшли коло
-            }
+    private boolean hasCycle(int curr, int prev, List<Integer>[] graph, boolean[] stack, boolean[] visited) {
+        visited[curr] = true;
+        stack[curr] = true;
+        for (Integer next : graph[curr]) {
+            if (stack[next])
+                return true;
+            else if (!visited[next] && hasCycle(next, curr, graph, stack, visited))
+                return true;
         }
-        G[V] = new LinkedList<>(); //ми знаємо що цей курс пройти можливо тому йдемо більше його не перевіряємо, оптимізація
-        onStack[V] = false;
-    }
-
-    private void dfsWithCyclePrinting(List<Integer>[] G, int V) {
-        onStack[V] = true;
-        isMarked[V] = true;
-        for (Integer w : G[V]) {
-            if (hasCycle) return;
-            if (!isMarked[w]) {
-                edgeTo[w] = V;
-                dfs(G, w); // стандартна dfs
-            }
-            if (onStack[w]) {
-                hasCycle = true; // якщо рекурсія прийшла в один з тих вузлів, де ще сама не закінчилась - ми знайшли коло
-                for (int x = V; x != w; x = edgeTo[V]) {
-                    System.out.println(x);
-                }
-                System.out.println(w);
-                System.out.println(V);
-            }
-        }
-        G[V] = new LinkedList<>(); //ми знаємо що цей курс пройти можливо тому йдемо більше його не перевіряємо, оптимізація
-        onStack[V] = false;
+        stack[curr] = false;
+        return false;
     }
 
     public static void main(String[] args) {
         CourseSchedule courseSchedule = new CourseSchedule();
-        System.out.println(courseSchedule.canFinish(4, new int[][]{{0,1},{2,0},{3,1},{3,2}}));
+        System.out.println(courseSchedule.canFinish(2, new int[][]{{0,1},{1,0}}));
     }
 }
